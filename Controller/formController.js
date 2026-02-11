@@ -15,16 +15,16 @@ const getAllForms = async (req, res) => {
 // Create a new form
 const createForm = async (req, res) => {
     try {
-        console.log('Request body:', req.body); // Debug log
+        console.log('Request body:', req.body); 
         
         const newForm = new Form(req.body);
         const savedForm = await newForm.save();
         
-        console.log('Saved form:', savedForm); // Debug log
+        console.log('Saved form:', savedForm); 
         await sendEmail(savedForm.email, 'Form Submission', `Thank you for submitting the form!\n\nLogin here: http://localhost:5173/login`);    
         res.status(201).json(savedForm);
     } catch (error) {
-        console.error('Error saving form:', error); // Debug log
+        console.error('Error saving form:', error); 
         res.status(400).json({ message: error.message });
     }
 };
