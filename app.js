@@ -4,7 +4,7 @@ const formRouter = require('./router/formRouter');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
 const app = express();
-const PORT =  5000;
+const PORT =  3001;
 
 // Middleware
 app.use(cors({
@@ -33,34 +33,35 @@ app.get('/api/test', (req, res) => {
     });
 });
 
-app.post('/send-email', (req, res) => {
-    const { subject, recipient } = req.body;
-    
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: process.env.EMAIL,
-            pass: process.env.PASSWORD
-        }
-    });
-    
-    const mailOptions = {
-        from: process.env.EMAIL,
-        to: recipient,
-        subject: subject,
-        text: 'Hello world!'
-    };
-    
-    transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-            console.log(error);
-            res.status(500).json({ message: 'Email sending failed', error: error.message });
-        } else {
-            console.log('Email sent: ' + info.response);
-            res.json({ message: 'Email sent successfully', info: info.response });
-        }
-    });
-});
+// Email sending endpoint (commented out)
+// app.post('/send-email', (req, res) => {
+//     const { subject, recipient } = req.body;
+//     
+//     const transporter = nodemailer.createTransport({
+//         service: 'gmail',
+//         auth: {
+//             user: 'dhruvrajput9560@gmail.com',
+//             pass: 'abcd-efgh-ijkl-mnop' // Replace with your actual Gmail App Password
+//         }
+//     });
+//     
+//     const mailOptions = {
+//         from: 'dhruvrajput9560@gmail.com',
+//         to: recipient,
+//         subject: subject,
+//         text: 'Hello world!'
+//     };
+//     
+//     transporter.sendMail(mailOptions, function(error, info){
+//         if (error) {
+//             console.log(error);
+//             res.status(500).json({ message: 'Email sending failed', error: error.message });
+//         } else {
+//             console.log('Email sent: ' + info.response);
+//             res.json({ message: 'Email sent successfully', info: info.response });
+//         }
+//     });
+// });
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
