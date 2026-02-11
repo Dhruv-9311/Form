@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const formRouter = require('./router/formRouter');
 const cors = require('cors');
+const nodemailer = require('nodemailer');
 const app = express();
 const PORT =  5000;
 
@@ -29,6 +30,35 @@ app.get('/api/test', (req, res) => {
         message: 'Backend is working!',
         timestamp: new Date().toISOString(),
         cors: 'enabled'
+    });
+});
+
+app.post('/send-email', (req, res) => {
+    const { subject, recipient } = req.body;
+    
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAIL,
+            pass: process.env.PASSWORD
+        }
+    });
+    
+    const mailOptions = {
+        from: process.env.EMAIL,
+        to: recipient,
+        subject: subject,
+        text: 'Hello world!'
+    };
+    
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+            res.status(500).json({ message: 'Email sending failed', error: error.message });
+        } else {
+            console.log('Email sent: ' + info.response);
+            res.json({ message: 'Email sent successfully', info: info.response });
+        }
     });
 });
 
